@@ -1,0 +1,82 @@
+if (!gradle.startParameter.taskNames.contains('release')) {
+    println "Not a release build, setting version to ${project.version}-SNAPSHOT"
+    project.version += '-SNAPSHOT'
+}
+
+
+task release(group: 'publishing') {
+    doLast {
+        println "Releasing $version"
+    }
+}
+
+
+project.plugins.withId('maven-publish') {
+
+    /* Add the generated pom.xml file into the JAR */
+    model {
+        tasks.jar {
+            into("META-INF/maven/${project.group}/${project.name}") {
+                from generatePomFileForMavenJavaPublication
+                rename 'pom-default.xml', 'pom.xml'
+            }
+        }
+    }
+
+    task sourcesJar(type: Jar, group: 'build',
+            description: 'Assembles a jar archive containing the sources.') {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar, group: 'build',
+            description: 'Assembles a jar archive containing the javadocs.') {
+        from tasks.javadoc
+        classifier = 'javadoc'
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact tasks.sourcesJar
+                artifact tasks.javadocJar
+            }
+        }
+    }
+
+    plugins.withId('com.jfrog.bintray') {
+        bintray.publications = ['mavenJava']
+    }
+}
+
+
+project.plugins.withId('com.jfrog.bintray') {
+    bintray {
+        user = project.bintray_user
+        key = project.bintray_key
+
+        dryRun = Boolean.valueOf(project.bintray_dryrun as String)
+
+        pkg {
+            repo = project.bintray_repo
+            name = project.name
+            desc = project.description
+            websiteUrl = project.home_url
+            licenses = ['MIT']
+            labels = (project.bintray_labels as String).split ','
+
+            vcsUrl = project.scm_url
+            issueTrackerUrl = project.issues_url
+            publicDownloadNumbers = true
+        }
+
+        pkg.version {
+            name = project.version
+            released = new Date()
+            vcsTag = "v${project.version}"
+        }
+    }
+
+    tasks.release.dependsOn tasks.bintrayUpload
+}

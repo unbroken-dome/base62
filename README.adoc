@@ -1,0 +1,54 @@
+= Base62 Library
+
+This is a small Java library for encoding and decoding data in base-62 format.
+
+It is mainly intended for encoding UUIDs in a way that is both compact and works
+well in URLs. In contrast to base-64, it doesn't require any non-alphanumeric characters.
+
+The 62 digits of the Base-62 system are represented by the 10 characters for decimal
+digits (`0` ... `9`), 26 uppercase alphabetic characters (`A` ... `Z`), and 26
+lowercase alphabetic characters (`a` ... `z`).
+
+The base-62 encoding requires 11 digits (characters) for a 64-bit `long`, and
+22 characters for a UUID.
+
+The library only supports encoding `long` and `UUID` values, and decoding strings
+whose length is a multiple of 11.
+
+
+== Usage
+
+The library is available through https://bintray.com/bintray/jcenter[JCenter].
+
+.pom.xml
+[source,xml]
+----
+<dependency>
+  <groupId>org.unbroken-dome.base62</groupId>
+  <artifactId>base62</artifactId>
+  <version>1.0.0</version>
+</dependency>
+----
+
+
+
+The interface of this library are the static methods of the `Base62` class.
+
+[source,java]
+----
+// Encode a long or an array of longs
+String encoded = Base62.encode(-4468979493829131317L);
+//    --> "aK7yM6vAKKD"
+
+// Decode a long from base-62
+long[] decoded = Base62.decode("aK7yM6vAKKD");
+//    --> [ -4468979493829131317L ]
+
+// Encode a UUID
+String encoded = Base62.encodeUUID( UUID.fromString("977d66bd-56af-4ad9-a0f7-b0dbe51e25fc") );
+//    --> "dyIujXEusfXd9r2hZoE6zM"
+
+// Decode a UUID
+UUID decoded = Base62.decodeUUID("dyIujXEusfXd9r2hZoE6zM");
+//    --> UUID 977d66bd-56af-4ad9-a0f7-b0dbe51e25fc
+----
