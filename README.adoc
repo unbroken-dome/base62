@@ -23,7 +23,7 @@ whose length is a multiple of 11.
 
 == Usage
 
-The library is available through https://bintray.com/bintray/jcenter[JCenter].
+The library is available through https://search.maven.org/artifact/{groupId}/{artifactId}/{version}/bundle[Maven Central].
 
 .pom.xml
 [source,xml,subs="+attributes"]
