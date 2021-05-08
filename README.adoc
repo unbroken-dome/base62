@@ -1,4 +1,9 @@
 = Base62 Library
+:version: 1.0.0
+:groupId: org.unbroken-dome.base62
+:artifactId: base62
+
+image:https://img.shields.io/maven-central/v/{groupId}/{artifactId}[link=https://search.maven.org/artifact/{groupId}/{artifactId}/{version}/bundle]
 
 This is a small Java library for encoding and decoding data in base-62 format.
 
