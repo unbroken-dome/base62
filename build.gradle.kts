@@ -18,5 +18,5 @@ java {
 
 dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-    testImplementation("org.spockframework:spock-core:1.1-groovy-2.4")
+    testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
 }
